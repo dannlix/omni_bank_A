@@ -1,0 +1,11 @@
+1-La catastrofe empresariual en produccion
+se determina que el uso de ONE DELETE CASCADE debe rechazarse en las relaciones  criticas del core bancario de omnibank, especialmente cuando involucren clientes, cunetas, transacciones
+anque este comportamiento puede facilitar la limpieza de datos en ambientes de desaroollo o prueba en produccion representa un riesgo grave
+un DELETE ejecutado por error sobre un cliente podira provocar automaticamente la eliminacion de todas sus cuentas y registros
+
+2-El rastro fiscal y auditoria contable inayeble
+los registros de core. transactrion core.loons y ademas informacion financiera historial no deben eliminarse fisicamente cuadno un clientecierre su cuenta e
+en omni bank, las transacciones representar operaciones que ocurrieron y formar parte del historial contable y de la audiotoria
+
+3-el estandar de la baja logica
+el equipo de QA no debe modificar en DDL productivo para facilitar la limpieza mediante ON DELETE CASE
