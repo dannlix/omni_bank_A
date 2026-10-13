@@ -1,0 +1,7 @@
+¿tiene razón el editror de que una columna es tecnicamenrte un dato derivado redundante segun la teoria estrct a de normalizacion pura?
+    si, ya que  el saldo_actual es un datop que se puede obtener a partir de las transacciionees de la cuenta
+
+¿que sucederia con la CPU y los tiempos de la latencia(milisegundos del servidore de postgresql si calcularamos el saldo desde cero (sum)) en cada solicitud de fronte (infracciones a NFRS de redimiento)
+    cuando calculamos el saldo con sume, el postgresql tendria que revisar las  transacciones en cada consulta estro aumentra el uso de cpu y la latencia sobre muchos clientes
+¿porque en la banca de grado empresarial montenerios deliberada ael campo saldo_actual coomo una desnormalizacion controlado y como se protegera para no caer en inconsistencia con el historial transaccionales el fururo?
+    Se mantiene saldo_actual porque necesito respuesta rapido y no puede estar calculando todo el historil de transacciionees cada vez que un cliente spmsulta su saldo
