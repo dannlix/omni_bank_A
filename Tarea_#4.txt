@@ -1,18 +1,15 @@
-Instrucciones
-Utiliza tu cliente SQL y redacta los siguientes scripts de creación de Dominios de grado empresarial que resolverán este reto arquitectónico:
+Reference Solution
+1. Script SQL para Dominios Bancarios de OmniBank
+-- Declaración del Dominio para blindaje monetario universal
+CREATE DOMAIN monto_financiero AS NUMERIC(15, 2)
+    CHECK (VALUE >= 0.00);
 
-1-El Dominio Monetario Bancario:
-    Escribe y ejecuta un comando CREATE DOMAIN ... para conformar el tipo exclusivo monto_financiero.
-    Este dominio se basará obligatoriamente sobre el tipo de dato financiero y preciso de PostgreSQL con 15 dígitos de longitud y 2 dígitos decimales contables oficiales.
-    Debe integrar de nacimiento un constraint (CHECK) de validación para rechazar automáticamente cualquier valor por debajo del cero matemático absoluto.
-2-El Dominio de Identificación Fiscal / Cadena No Vacía:
-    Escribe y ejecuta el comando CREATE DOMAIN ... para crear el tipo texto_obligatorio que envolverá las columnas de tax_id o nombres fiscales.
-    Apóyate en el tipo base VARCHAR(100) agregándole al dominio el constraint intrínseco de rechazar cadenas que consten meramente de un texto vacío o puros espacios en blanco ineficaces: CHECK (VALUE <> '' AND LENGTH(TRIM(VALUE)) > 0).
+-- Declaración del Dominio para textos que repelen espacios en blanco o cadenas vacías ilegales
+CREATE DOMAIN texto_obligatorio AS VARCHAR(100)
+    CHECK (VALUE <> '' AND LENGTH(TRIM(VALUE)) > 0);
+2. Identificación Transversal en Columnas
+El Dominio monto_financiero impactará positivamente y reemplazará al tipo nativo en al menos estas 3 columnas decisivas de nuestra arquitectura bancaria:
 
-1-
-CREATE DOMAIN monto_financiero AS NUMERIC (15,2) CHECK (VALUE >=0.00);
-CREATE DOMAIN texto_obligatorio AS VARCHAR (100) CHECK (VALUE <> AND LENGTH (TRIM (VALUE))>0);
-
-2-
-ubique .saldo de la primera tabla el cual es "cuenta"
-ubique .monto de la tercera tabla el cual es "Transacciones"
+La columna saldo_actual dentro de la tabla Cuentas.
+La columna limite_credito dentro de la tabla Cuentas.
+La columna monto_tx dentro de la tabla Transacciones.
