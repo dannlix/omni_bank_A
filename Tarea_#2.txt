@@ -1,0 +1,15 @@
+Instrucciones
+Edita el ERD que construiste en la actividad para incluir estos nuevos detalles:
+
+1-Agrega los atributos de seguridad: Incluye en la tabla Clientes el campo necesario para el borrado lógico, y en la tabla Cuentas el campo para la auditoría de tiempo.
+2-Define el tipo de dato de las llaves: Añade una nota o marca en tu diagrama indicando qué tipo de dato específico usarás para todas las llaves primarias (PK) de tu modelo para satisfacer el requerimiento del equipo Backend.
+3-Agrega los Constraints: Anota al lado de los atributos correspondientes las reglas de negocio (ej. "No puede ser negativo", "Debe ser único").
+
+[Clientes] 1 -------------------- N [Cuentas] 1 -------------------- N [Transacciones]
+-Clientes_id (PK) (Aleatorio)       -cuenta_id(PK)                      -transaccion_id(FK)
+-correo                             -cliente_id(PK)                     -monto
+-telefono                           -moneda                             -tipo_transaccion
+-fecha_nacimiento                   -tipo_cuenta
+-tax_id                             -saldo_actual
+-Estado                             -limite_credito
+                                    -fecha_limite
