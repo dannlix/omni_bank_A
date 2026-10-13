@@ -1,0 +1,27 @@
+Instrucciones
+Abre tu cliente SQL con conexión local (DBeaver o terminal psql), tu editor favorito o documento en blanco, y cumple el siguiente circuito práctico:
+
+1-Diseña los Tipos Enumerados (ENUMs) del Banco:
+    Identifica y escribe las 3 sentencias SQL del tipo CREATE TYPE ... AS ENUM (...) que reemplacen al uso desprotegido de strings para las siguientes categorías transaccionales:
+    Monedas admitidas por el banco (ej: 'USD', 'EUR', 'MXN').
+    Tipos de cuentas bancarias (ej: 'CHECKING', 'SAVINGS', 'CREDIT').
+    Tipos de movimiento transaccional (ej: 'DEPOSIT', 'WITHDRAWAL', 'TRANSFER').
+2-Corrección de Tipos Nativos y Especificación Relacional:
+    Para la tabla Cuentas, asigna el tipo de dato físico de PostgreSQL profesional para el saldo (sustituyendo a FLOAT) y la fecha y hora de modificación de la cuenta (incorporando protección de zona horaria mundial).
+    Para las tablas Clientes, Cuentas y Transacciones, formaliza en tu documento textual qué tipo exacto asignarás para las Llaves Primarias (PK) y Foráneas (FK) respetando el requerimiento de alta seguridad de identificadores al azar del Día 2.
+
+
+Diseña los tipos Enumerados
+CREATE TYPE moneda_omitidas AS ENUM ('USD','EUR','MXN')
+CREATE TYPE tipos_cuentas AS ENUM ('CHECKING','SAVINGS','CREDIT')
+CREATE TYPE tipos_monedas AS ENUM ('DEPOSIT','WITHDRAWAL','TRANSFER')
+
+(llave primaria y foraneas) correcion de tipos nativo y especificadas
+
+(PK)                    FK              cuentas                    clientes                 transacciionees
+cliente_id(PK)          cliente_id     clientes_numeros(FK)        cliente_id(PK)           transaccion_id(PK)
+cuenta_id(PK)           cuenta_id      saldo_actual                cliente_nombre           fecha(PK)
+transaccion_id(PK)                     fecha                       email                    moneda_admitida
+                                                                   telefono                 tipos_cuentas
+                                                                   cliente_tax_id           monto
+                                                                                            cuenta_numero(FK)
