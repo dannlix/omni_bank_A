@@ -1,0 +1,27 @@
+-Paso 1 - Primera Forma Normal (1NF):
+    -Identifica y separa los campos que violan el principio de atomicidad (como nombres compuestos con métodos de contacto combinados, o campos de moneda y tipo anidados).
+    -Escribe cómo quedarían las columnas si estuvieran en 1NF.
+-Paso 2 - Segunda y Tercera Forma Normal (2NF y 3NF):
+    -Responde: en la tabla de transacciones, ¿por qué la información como cliente_tax_id, cliente_nombre, y sucursal_direccion viola la 2NF y 3NF si la llave primaria es transaccion_id?
+    -Separa conceptualmente este monolito en 4 tablas en 3NF: Clientes, Cuentas, Transacciones, y Sucursales.
+    -Define para cada tabla su Llave Primaria (PK) y asigna las Llaves Foráneas (FK) correctas para preservar todas las relaciones sin duplicar textos redundantes de contacto ni de sucursales.
+
+
+paso 1
+    1NF
+    transacciones_id    fecha_tx      cliente_tax_id    cliente_nombre    contacto                cuenta_numero    moneda    tipo      saldo_actual    monto_tx    sucursal_codigo    sucursal_direccion
+    tx_0004             2026-07-20    tax-9911          Roberto Soto      Robe@gmail.sss_email    CTA-100          USD       cheque    1500.00        +500.00      S-CDMX             AV.JUAREZ#100
+    tx_0002             2026-07-21    tax-9911          Roberto Soto      Robe@gmail.sss_email    CTA-100          USD       cheque    1300.00        -200.00      S-CDMX             AV.JUAREZ#100
+
+paso 2
+    ¿porque ña inf como clientes_tax_id, clientes_nombres y sucursal_direccion violaa la 2NF y 3NF la llave primaria es transaccion_id?
+        porque son 3 diferentes y no comparten el mismo sucursal_direccion
+
+    3NF
+    [clientes] (3NF)     [Cuentas](3NF)       Transacciones(3NF)    [sucursales](3NK)
+    cliente_id(PK)       cuenta_numero(PK)    transaccion_id(PK)    sucursal_codigo(PK)
+    cliente_nombre       saldo_actual         fecha_tx              sucursal_direccion
+    email                fecha_tx(FK)         moneda                transaccion_id(FK)
+    telefono                                  tipo
+    cliente_tax_id                            monto_tx
+                                              cuenta_numero(FK)
