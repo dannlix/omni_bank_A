@@ -1,21 +1,7 @@
-
-SELECT 
-    transaction_id,
-    amount,
-    tx_type,
-    tx_timestamp,
-    COALESCE(description, 'EXCLUSIÓN OPORTUNAMENTE DETECTADA - SIN MOTIVO DE PAGO') AS descripcion_monitoreada
+Reference Solution
+SELECT transaction_id,account_id,tx_type,amount,
+       COALESCE(NULLIF(TRIM(description),''),'SIN DESCRIPCIÓN') AS visible_description
 FROM core.transactions
-WHERE 
-
-    (amount >= 10000.00 AND tx_type IN ('TRANSFER', 'WITHDRAWAL'))
-    OR 
-
-    (
-        description ILIKE '%crypto%' 
-        OR description ILIKE '%offshore%' 
-        OR description ILIKE '%shell%' 
-        OR description ILIKE '%casino%' 
-        OR (NULLIF(TRIM(description), '') IS NULL AND tx_type != 'DEPOSIT')
-    )
-ORDER BY amount DESC;
+WHERE (tx_type IN ('TRANSFER','WITHDRAWAL') AND amount>=100)
+   OR (tx_type='WITHDRAWAL' AND NULLIF(TRIM(description),'') IS NULL)
+ORDER BY amount DESC,transaction_id;
