@@ -1,20 +1,13 @@
-SELECT 
-    (SELECT COUNT(*) FROM core.customers) AS count_customers,
-    (SELECT COUNT(*) FROM core.accounts) AS count_accounts,
-    (SELECT COUNT(*) FROM core.transactions) AS count_transactions,
-    (SELECT COUNT(*) FROM core.customers) 
-    * (SELECT COUNT(*) FROM core.accounts) 
-    * (SELECT COUNT(*) FROM core.transactions) AS total_cartesian_product;
+Reference Solution
+SELECT (SELECT COUNT(*) FROM core.customers) AS customers,
+       (SELECT COUNT(*) FROM core.accounts) AS accounts,
+       (SELECT COUNT(*) FROM core.transactions) AS transactions;
+SELECT COUNT(*) AS combinations
+FROM core.customers CROSS JOIN core.accounts CROSS JOIN core.transactions;
 
-SELECT 
-    c.email,
-    a.account_number,
-    t.tx_type,
-    t.amount,
-    t.tx_timestamp
+SELECT c.email,a.account_number,t.tx_type,t.amount,t.tx_timestamp
 FROM core.transactions t
-INNER JOIN core.accounts a ON t.account_id = a.account_id
-INNER JOIN core.customers c ON a.customer_id = c.customer_id
-WHERE c.is_active = true
-  AND t.amount >= 100.00
-ORDER BY t.tx_timestamp, t.transaction_id;
+JOIN core.accounts a ON a.account_id=t.account_id
+JOIN core.customers c ON c.customer_id=a.customer_id
+WHERE c.is_active AND t.amount>=100
+ORDER BY t.tx_timestamp,t.transaction_id;
