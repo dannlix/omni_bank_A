@@ -1,0 +1,19 @@
+1-Causa del problema
+El error ocurrio porque postgreSQL tuvo que revisar las 75 millones de filas para comprobar el nuevo CHECK durante la operacion se obtuvo 
+un bloque ACCESS EXCLUSIVE por lo que los operaciones que necesitaban acceder a core.transactions
+
+2-Solucion con NOT VALID
+para evitar el bnloque prologada, primero se agrega las restriccion sin revisar los datos historicos
+
+ALTER TABLE core.transaction
+ADD CONSTRAINT chk_transactions_description_valid
+CHECK (LENGTH(TRIM(description)) >=5)
+NOT VALID;
+
+despues en otro momento se valida el historial 
+ALTER TABLE core_transactions
+VALIDE CONSTRAINT chk_transactions_valid;
+
+3-conclusion
+El probelma fue realizar la validacion completa directamente en produccion y la solucion es utilizar el metodo de dos pasos
+NOT VALIED y VALIDATE CONSTRAINT
