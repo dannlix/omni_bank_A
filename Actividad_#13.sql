@@ -1,48 +1,18 @@
-WITH 
-tx_summary AS (
-    SELECT 
-        account_id,
-        COUNT(transaction_id) AS total_movimientos,
-        SUM(amount) AS volumen_bruto_registrado
-    FROM core.transactions
-    GROUP BY account_id
-),
-
-active_accounts_metrics AS (
-    SELECT 
-        a.account_id,
-        a.customer_id,
-        a.account_number,
-        a.currency,
-        a.account_type,
-        a.balance,
-        COALESCE(s.total_movimientos, 0) AS total_movimientos,
-        COALESCE(s.volumen_bruto_registrado, 0.00) AS volumen_bruto_registrado
-    FROM core.accounts a
-    LEFT JOIN tx_summary s ON a.account_id = s.account_id
-    WHERE a.is_active = true
+Reference Solution
+WITH movement AS (
+ SELECT account_id, COUNT(*) AS tx_count, SUM(amount) AS gross_volume
+ FROM core.transactions GROUP BY account_id
+), account_metrics AS (
+ SELECT a.account_id, a.account_number, a.currency, a.customer_id,
+        COALESCE(m.tx_count,0) AS tx_count,
+        COALESCE(m.gross_volume,0) AS gross_volume
+ FROM core.accounts a LEFT JOIN movement m USING (account_id)
+ WHERE a.is_active
 )
-
-SELECT 
-    m.account_number,
-    m.account_type,
-    m.currency,
-    c.first_name || ' ' || c.last_name AS titular,
-    m.total_movimientos,
-    m.volumen_bruto_registrado,
-    m.balance AS saldo_almacenado,
-    CASE 
-        WHEN m.total_movimientos = 0 THEN 'SIN ACTIVIDAD'
-        WHEN m.total_movimientos BETWEEN 1 AND 2 THEN 'ACTIVIDAD MODERADA'
-        ELSE 'ALTA ACTIVIDAD'
-    END AS banda_actividad
-FROM active_accounts_metrics m
-INNER JOIN core.customers c ON m.customer_id = c.customer_id
-ORDER BY m.account_number;
-
-SELECT COUNT(*) AS total_cuentas_activas 
-FROM core.accounts 
-WHERE is_active = true;
-
-SELECT SUM(amount) AS volumen_bruto_total_ledger 
-FROM core.transactions;
+SELECT c.first_name, c.last_name, am.account_number, am.currency,
+       am.tx_count, am.gross_volume,
+       CASE WHEN am.tx_count = 0 THEN 'SIN MOVIMIENTOS' ELSE 'CON MOVIMIENTOS' END AS activity_band
+FROM account_metrics am JOIN core.customers c USING (customer_id)
+ORDER BY am.account_number;
+SELECT (SELECT COUNT(*) FROM core.accounts WHERE is_active) AS active_accounts,
+       (SELECT COALESCE(SUM(amount),0) FROM core.transactions) AS direct_gross_volume;
